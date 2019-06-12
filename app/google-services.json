@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "374277811798",
+    "firebase_url": "https://memory-ba556.firebaseio.com",
+    "project_id": "memory-ba556",
+    "storage_bucket": "memory-ba556.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374277811798:android:7c75d398f4a745b3",
+        "android_client_info": {
+          "package_name": "com.anioncode.memory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374277811798-k7iggkge633tmtso3um23167lv9bqtmu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anioncode.memory",
+            "certificate_hash": "6de6e93eb89ce80312c3d324c102468d87f14c42"
+          }
+        },
+        {
+          "client_id": "374277811798-s31cc6dmto7h5iuaqfnga5hrese5d53a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY3sz5uguVBg8LjzdgKa4ntl4qBJmyvBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374277811798-s31cc6dmto7h5iuaqfnga5hrese5d53a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
