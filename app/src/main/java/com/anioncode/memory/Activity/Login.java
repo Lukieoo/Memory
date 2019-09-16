@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.anioncode.memory.Models.StaticClass;
 import com.anioncode.memory.R;
 import com.anioncode.memory.Models.User;
 import com.anioncode.memory.Models.UserClient;
@@ -69,6 +70,7 @@ public class Login extends AppCompatActivity  {
 //                intent.putExtra("dane", "Witaj");
                 startActivity(intent);
                 finish();
+
             }
         });
 
@@ -139,9 +141,10 @@ public class Login extends AppCompatActivity  {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
                                 Log.d(TAG, "onComplete: successfully set the user client.");
+
                                 User user = task.getResult().toObject(User.class);
-                                UserClient userClient=new UserClient();
-                                userClient.setUser(user);
+                                StaticClass.USER_CLIENT= String.valueOf(user.getUsername());
+
                                // ((UserClient)(getApplicationContext())).setUser(user);
                             }
                         }

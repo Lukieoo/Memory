@@ -18,4 +18,9 @@
 
 
     </style>
+    <style name="Fab" >
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+
+    </style>
 </resources>

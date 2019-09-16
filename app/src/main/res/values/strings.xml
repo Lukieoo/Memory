@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">Memory</string>
+    <string name="app_name">Zaznacz To</string>
+    <string name="zaloguj">Zaloguj</string>
+    <string name="pawssword">Pawssword</string>
+    <string name="email">Email</string>
+    <string name="znacz_co_chesz_ndo_cz_do_nas">Znacz co chesz!\n  Dołącz do nas!</string>
+    <string name="todoo">TODOo</string>
+    <string name="Wpiszadresubmiejsce">Wpisz adres lub miejsce</string>
+    <string name="jeszcze_tylko_krok">Jeszcze tylko krok!</string>
+    <string name="nick">Nick</string>
+    <string name="zarejestruj">Zarejestruj</string>
+    <string name="pawsswords">Pawssword</string>
+    <string name="wyszukaj_z_pixabay_com">Wyszukaj z pixabay.com</string>
+    <string name="wklej_url_obrazka_http">Wklej url obrazka http://</string>
+    <string name="opis">Opis</string>
+    <string name="pozycja_y">Pozycja y</string>
+    <string name="nazwa_adress">Nazwa adress</string>
+    <string name="pozycja_x">Pozycja x</string>
+    <string name="like">Like:</string>
+    <string name="creator_name">Creator Name</string>
+    <string name="todot">TODO</string>
+    <string name="twoi_znajomi">Twoi znajomi</string>
+    <string name="wprowad_id">Wprowadź ID</string>
+    <string name="_12345678910">12345678910</string>
+    <string name="id_share">ID Share:</string>
+    <string name="todoxx">TODO</string>
 </resources>

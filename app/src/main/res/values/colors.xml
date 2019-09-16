@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#FF9800</color>
     <color name="colorAccent">#464B69</color>
     <color name="colorOrange">#FF9800</color>
+    <color name="yel">#FDD835</color>
+    <color name="whiteopacity">#6FFFFFFF</color>
 </resources>
