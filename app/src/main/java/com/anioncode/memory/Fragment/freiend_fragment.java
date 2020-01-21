@@ -87,7 +87,8 @@ public class freiend_fragment extends Fragment {
             public void onItemClick(int position, String rodzaj) {
                 if (rodzaj.equals("button")) {
                     Places clickedItem = adds.get(position);
-                    Toast.makeText(getActivity(), clickedItem.getPlaces_id(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getActivity(), clickedItem.getPlaces_id(), Toast.LENGTH_LONG).show();
+
                     noteRef.document(clickedItem.getPlaces_id()).delete();
 
                 } else {

@@ -62,7 +62,7 @@
             android:id="@+id/Opis"
             android:layout_width="match_parent"
             android:inputType="text"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:hint="@string/opis"
             android:autofillHints=""
             android:importantForAutofill="no" tools:targetApi="o"/>
@@ -72,7 +72,7 @@
             android:scaleY="0.9"
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

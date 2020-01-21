@@ -63,6 +63,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 import static com.android.volley.VolleyLog.TAG;
 
@@ -101,9 +102,7 @@ public class Profile_fragment extends Fragment {
     FloatingActionButton fab1;
     FloatingActionButton fab2;
     FloatingActionButton fab3;
-    boolean isOpen=false;
-
-
+    boolean isOpen = false;
 
 
     @Nullable
@@ -117,32 +116,55 @@ public class Profile_fragment extends Fragment {
         //   mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mRecyclerView.setNestedScrollingEnabled(false);
+        mExampleList = new ArrayList<>();
         mListener = new Profile_adapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, String rodzaj) {
+            public void onItemClick(final int position, String rodzaj) {
                 if (rodzaj.equals("button")) {
-                    Friend clickedItem = friends.get(position);
-                    Toast.makeText(getActivity(), clickedItem.getFriend_Doc_id(), Toast.LENGTH_LONG).show();
-                    noteRef.document(clickedItem.getFriend_Doc_id()).delete();
+                    final Friend clickedItem = friends.get(position);
+                    //Toast.makeText(getActivity(), clickedItem.getFriend_Doc_id(), Toast.LENGTH_LONG).show();
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("Chcesz usunąć ?");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ANULUJ",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    noteRef.document(clickedItem.getFriend_Doc_id()).delete();
+
+                                    friends.remove(position);
+                                    recycle_adapter.notifyItemRemoved(position);
+                                    recycle_adapter.notifyItemRangeChanged(position, friends.size());
+                                }
+                            });
+
+                    alertDialog.show();
+
+                    //noteRef.document(clickedItem.getFriend_Doc_id()).delete();
 
 
                 }
             }
         };
 
-        fab=(FloatingActionButton) view.findViewById(R.id.fab);
-        fab1=(FloatingActionButton) view.findViewById(R.id.fab1);
-        fab2=(FloatingActionButton) view.findViewById(R.id.fab2);
-        fab3=(FloatingActionButton) view.findViewById(R.id.fab3);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab1 = (FloatingActionButton) view.findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) view.findViewById(R.id.fab2);
+        fab3 = (FloatingActionButton) view.findViewById(R.id.fab3);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isOpen){
+                if (!isOpen) {
                     openMenu();
 
 
-                }else {
+                } else {
                     closeMenu();
                 }
             }
@@ -154,13 +176,13 @@ public class Profile_fragment extends Fragment {
 
                 LayoutInflater inflater2 = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
                 final View view1 = inflater2.inflate(R.layout.qr_barcode, null);
-                ImageView imageView=view1.findViewById(R.id.ImageViewButton);
+                ImageView imageView = view1.findViewById(R.id.ImageViewButton);
                 try {
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.encodeBitmap(FirebaseAuth.getInstance().getUid(), BarcodeFormat.QR_CODE, 400, 400);
 
                     imageView.setImageBitmap(bitmap);
-                } catch(Exception e) {
+                } catch (Exception e) {
 
                 }
 
@@ -184,10 +206,10 @@ public class Profile_fragment extends Fragment {
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String shareBody ="Zapraszam cię do aplikacji  \"Zaznacz To\" moje ID :* "+ FirebaseAuth.getInstance().getUid()+ " *  \n https://play.google.com/store/apps/details?id=com.anioncode.memory " ;
+                String shareBody = "Zapraszam cię do aplikacji  \"Zaznacz To\" moje ID :* " + FirebaseAuth.getInstance().getUid() + " *  \n https://play.google.com/store/apps/details?id=com.anioncode.memory ";
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Zaznacz To" );
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Zaznacz To");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Zaznacz To "));
             }
@@ -217,24 +239,7 @@ public class Profile_fragment extends Fragment {
                 mRecyclerViewx.setLayoutManager(new LinearLayoutManager(getActivity()));
                 final EditText get = view1.findViewById(R.id.search);
                 FloatingActionButton button = view1.findViewById(R.id.ser);
-                mExampleList = new ArrayList<>();
-                mListenerx = new ExampleAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        ExampleItem exampleItem = mExampleList.get(position);
-                        editText.setText(exampleItem.getImageUrl());
-                        hideSoftKeyboard();
-                        docRef.update("avatar", editText.getText().toString().trim());
-                        try {
-                            Glide.with(getActivity()).load(editText.getText().toString().trim()).into(circleImageView);
-                            Snackbar.make(view1,"Prawidłowo zmieniłeś swoje zdjęcie profilowe .", LENGTH_SHORT).show();
 
-                        } catch (Exception e) {
-                            Snackbar.make(view1,"Coś poszło nie tak.. O.o Ups ?.", LENGTH_SHORT).show();
-                        }
-
-                    }
-                };
 
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -276,7 +281,25 @@ public class Profile_fragment extends Fragment {
                             }
                         });
 
-                AlertDialog alert11 = builder1.create();
+                final AlertDialog alert11 = builder1.create();
+
+                mListenerx = new ExampleAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        ExampleItem exampleItem = mExampleList.get(position);
+                        editText.setText(exampleItem.getImageUrl());
+                        hideSoftKeyboard();
+                        docRef.update("avatar", editText.getText().toString().trim());
+                        try {
+                            Glide.with(getActivity()).load(editText.getText().toString().trim()).into(circleImageView);
+                            Snackbar.make(getView(), "Prawidłowo zmieniłeś swoje zdjęcie profilowe .", LENGTH_LONG).show();
+
+                        } catch (Exception e) {
+                            Snackbar.make(getView(), "Coś poszło nie tak.. O.o Ups ?.", LENGTH_LONG).show();
+                        }
+                        alert11.cancel();
+                    }
+                };
                 alert11.show();
             }
         });
@@ -403,8 +426,7 @@ public class Profile_fragment extends Fragment {
                             Snackbar.make(parentLayout, "Znajomy został juz dodany", Snackbar.LENGTH_SHORT).show();
                         }
                     }
-                }
-                else {
+                } else {
                     View parentLayout = getActivity().findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "To jest twoje ID", Snackbar.LENGTH_SHORT).show();
                 }
@@ -489,14 +511,16 @@ public class Profile_fragment extends Fragment {
         super.onPause();
         if (registration != null) registration.remove();
     }
+
     private void openMenu() {
-        isOpen=true;
+        isOpen = true;
         fab1.animate().translationY(-getResources().getDimension(R.dimen.stan_55));
         fab2.animate().translationY(-getResources().getDimension(R.dimen.stan_105));
         fab3.animate().translationY(-getResources().getDimension(R.dimen.stan_155));
     }
+
     private void closeMenu() {
-        isOpen=false;
+        isOpen = false;
         fab1.animate().translationY(0);
         fab2.animate().translationY(0);
         fab3.animate().translationY(0);

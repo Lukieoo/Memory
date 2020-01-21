@@ -2,6 +2,7 @@ package com.anioncode.memory.Fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,12 @@ import com.anioncode.memory.Models.Places;
 import com.anioncode.memory.Models.User;
 import com.anioncode.memory.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -74,11 +81,33 @@ public class List_fragment extends Fragment implements View.OnClickListener {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mListener = new Recycle_adapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, String rodzaj) {
+            public void onItemClick(final int position, String rodzaj) {
                 if (rodzaj.equals("button")) {
-                    Places clickedItem = adds.get(position);
-                    Toast.makeText(getActivity(), clickedItem.getPlaces_id(), Toast.LENGTH_LONG).show();
-                    noteRef.document(clickedItem.getPlaces_id()).delete();
+                    final Places clickedItem = adds.get(position);
+                   // Toast.makeText(getActivity(), clickedItem.getPlaces_id(), Toast.LENGTH_LONG).show();
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setTitle("Chcesz usunąć ?");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "ANULUJ",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    noteRef.document(clickedItem.getPlaces_id()).delete();
+
+                                    adds.remove(position);
+                                    recycle_adapter.notifyItemRemoved(position);
+                                    recycle_adapter.notifyItemRangeChanged(position,adds.size());
+                                }
+                            });
+
+                    alertDialog.show();
+                  //  noteRef.document(clickedItem.getPlaces_id()).delete();
+
 
                 } else {
                     Places clickedItem = adds.get(position);
@@ -100,7 +129,29 @@ public class List_fragment extends Fragment implements View.OnClickListener {
                                     User user = task.getResult().toObject(User.class);
 
                                     try {
-                                        Glide.with(getActivity()).load(user.getAvatar()).into(circleImageView);
+                                        Glide.with(getActivity())
+                                                .asDrawable()
+                                                .load(user.getAvatar())
+                                                .thumbnail(Glide.with(getActivity())
+                                                        .asDrawable()
+                                                        .load(user.getAvatar()))
+                                                .listener(new RequestListener<Drawable>() {
+                                                    @Override
+                                                    public boolean onLoadFailed(GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                        return false;
+                                                    }
+
+                                                    @Override
+                                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                        if (isFirstResource) {
+                                                            return false; // thumbnail was not shown, do as usual
+                                                        }
+                                                     return true;
+                                                    }
+                                                })
+                                                .into(circleImageView);
+
+                                       // Glide.with(getActivity()).load(user.getAvatar()).into(circleImageView);
                                         AVATAR = user.getAvatar();
                                     } catch (Exception e) {
                                         Glide.with(getActivity()).load(R.drawable.ic_person).into(circleImageView);

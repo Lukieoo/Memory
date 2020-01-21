@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -294,9 +295,11 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
             @Override
             public void onMapLongClick(final LatLng latLng) {
                 // Clears the previously touched position
+                Drawable circleDrawable = getResources().getDrawable(R.drawable.marker2);
+                BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable);
 
                 final MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(HUE_CYAN));
+                markerOptions.icon(markerIcon);
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
@@ -543,7 +546,11 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
 
                                 Places p = d.toObject(Places.class);
 
-                                final Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(p.getPosition1()), Double.parseDouble(p.getPosition2()))).title(p.getName()).snippet(p.getDescription() + "\n" + p.getTimestamp() + "\n" + p.getUsername()));
+                                Drawable circleDrawable = getResources().getDrawable(R.drawable.marker);
+                                BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable);
+
+                                final Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(p.getPosition1()),
+                                        Double.parseDouble(p.getPosition2()))).title(p.getName()).icon(markerIcon).snippet(p.getDescription() + "\n" + p.getTimestamp() + "\n" + p.getUsername()));
 
 
                                 /// ICONY PROFILU
@@ -560,7 +567,14 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
                                                         //       Glide.with(getActivity()).load(user.getAvatar()).into(circleImageView);
 
                                                         //    marker.setIcon(markerIcon);
-                                                        loadMarkerIcon(marker, user.getAvatar());
+
+
+
+
+
+
+
+                                                       loadMarkerIcon(marker,user.getAvatar());
 
                                                     }
                                                 } catch (Exception e) {
@@ -618,7 +632,11 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
 
                                                     Places p = d.toObject(Places.class);
                                                     //      mMap.clear();
-                                                    final Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(p.getPosition1()), Double.parseDouble(p.getPosition2()))).title(p.getName()).snippet(p.getDescription() + "\n" + p.getTimestamp() + "\n" + p.getUsername()));
+                                                    Drawable circleDrawable = getResources().getDrawable(R.drawable.marker);
+                                                    BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable);
+
+                                                    final Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(p.getPosition1()),
+                                                            Double.parseDouble(p.getPosition2()))).title(p.getName()).icon(markerIcon).snippet(p.getDescription() + "\n" + p.getTimestamp() + "\n" + p.getUsername()));
 
                                                     DocumentReference docRef = mDb.collection("USERS").document(p.getUser_id());
                                                     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -629,6 +647,8 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
                                                                 if (document != null) {
                                                                     User user = task.getResult().toObject(User.class);
                                                                     try {
+
+
                                                                         loadMarkerIcon(marker, user.getAvatar());
                                                                     } catch (Exception e) {
                                                                         BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
@@ -740,7 +760,34 @@ public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.
                 });
 
     }
+    private void loadMarkerIcon(final Marker marker) {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_person);
 
+        Glide.with(this).asBitmap().load(icon).
+                into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        if (resource != null) {
+
+                            Bitmap mBitmap = getCroppedBitmap(resource);
+                            //mBitmap.getConfig();
+
+                            mBitmap = scaleDown(mBitmap, 125, true);
+//                            mBitmap = getRoundedCornerBitmap(mBitmap, 125);
+                            mBitmap = getborder(mBitmap);
+                            mBitmap = getCircledBitmap(mBitmap);
+
+                            //   mBitmap = createRoundedBitmapDrawableWithBorder(mBitmap);
+                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(mBitmap);
+                            marker.setIcon(icon);
+                        }
+
+                    }
+
+                });
+
+    }
     public Bitmap getborder(Bitmap bitmap) {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();

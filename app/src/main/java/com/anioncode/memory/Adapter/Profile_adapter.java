@@ -149,9 +149,9 @@ public class Profile_adapter extends RecyclerView.Adapter<Profile_adapter.Exampl
             switch (v.getId()) {
                 case R.id.delete: {
                     mListener.onItemClick(getAdapterPosition(), "button");
-                    friends.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
-                    notifyItemRangeChanged(getAdapterPosition(),friends.size());
+//                    friends.remove(getAdapterPosition());
+//                    notifyItemRemoved(getAdapterPosition());
+//                    notifyItemRangeChanged(getAdapterPosition(),friends.size());
                     break;
                 }
                 default: {
