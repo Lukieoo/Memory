@@ -23,13 +23,13 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -85,7 +85,6 @@ import java.util.Locale;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.android.volley.VolleyLog.TAG;
 import static com.anioncode.memory.Models.StaticClass.USER_CLIENT;
-import static com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_CYAN;
 
 public class Maps_fragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
